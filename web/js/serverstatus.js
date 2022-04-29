@@ -74,7 +74,6 @@ function uptime() {
 						"<td id=\"cpu\"><div class=\"progress\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
 						"<td id=\"memory\"><div class=\"progress\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
 						"<td id=\"hdd\"><div class=\"progress\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
-						"<td id=\"io\"><div class=\"progress\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
 						"<td id=\"ping\"><div class=\"progress\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
 					"</tr>" +
 					"<tr class=\"expandRow " + hack + "\"><td colspan=\"16\"><div class=\"accordian-body collapse\" id=\"rt" + i + "\">" +
@@ -136,8 +135,6 @@ function uptime() {
 					TableRow.children["hdd"].children[0].children[0].className = "progress-bar progress-bar-danger";
 					TableRow.children["hdd"].children[0].children[0].style.width = "100%";
 					TableRow.children["hdd"].children[0].children[0].innerHTML = "<small>关闭</small>";
-					TableRow.children["io"].children[0].children[0].className = "progress-bar progress-bar-danger";
-					TableRow.children["io"].children[0].children[0].innerHTML = "<small>关闭</small>";
 					TableRow.children["ping"].children[0].children[0].className = "progress-bar progress-bar-danger";
 					TableRow.children["ping"].children[0].children[0].style.width = "100%";
 					TableRow.children["ping"].children[0].children[0].innerHTML = "<small>关闭</small>";
@@ -239,21 +236,23 @@ function uptime() {
 					TableRow.children["hdd"].children[0].children[0].className = "progress-bar progress-bar-success";
 				TableRow.children["hdd"].children[0].children[0].style.width = HDD + "%";
 				TableRow.children["hdd"].children[0].children[0].innerHTML = HDD + "%";
-				ExpandRow[0].children["expand_hdd"].innerHTML = "硬盘: " + bytesToSize(result.servers[i].hdd_used*1024*1024, 2) + " / " + bytesToSize(result.servers[i].hdd_total*1024*1024, 2);
-
-				//IO， 过小的B字节单位没有意义
+				// IO Speed for HDD.
+				// IO， 过小的B字节单位没有意义
 				var io = "";
 				if(result.servers[i].io_read < 1024*1024)
 					io += parseInt(result.servers[i].io_read/1024) + "K";
 				else
 					io += parseInt(result.servers[i].io_read/1024/1024) + "M";
-				io += "💿"
+				io += "💾"
 				if(result.servers[i].io_write < 1024*1024)
 					io += parseInt(result.servers[i].io_write/1024) + "K";
 				else
 					io += parseInt(result.servers[i].io_write/1024/1024) + "M";
-				TableRow.children["io"].children[0].children[0].className = "progress-bar progress-bar-success";
-				TableRow.children["io"].children[0].children[0].innerHTML = "<small>"+io+"</small>";
+				TableRow.children["hdd"].children[0].setAttribute("data-toggle", "tooltip");
+				TableRow.children["hdd"].children[0].setAttribute("data-placement", "right");
+				TableRow.children["hdd"].children[0].setAttribute("title", io);
+				// Expand for HDD.
+				ExpandRow[0].children["expand_hdd"].innerHTML = "硬盘: " + bytesToSize(result.servers[i].hdd_used*1024*1024, 2) + " / " + bytesToSize(result.servers[i].hdd_total*1024*1024, 2);
 
                 // delay time
 
@@ -308,8 +307,6 @@ function uptime() {
 				TableRow.children["hdd"].children[0].children[0].className = "progress-bar progress-bar-error";
 				TableRow.children["hdd"].children[0].children[0].style.width = "100%";
 				TableRow.children["hdd"].children[0].children[0].innerHTML = "<small>错误</small>";
-				TableRow.children["io"].children[0].children[0].className = "progress-bar progress-bar-error";
-				TableRow.children["io"].children[0].children[0].innerHTML = "<small>错误</small>";
 				TableRow.children["ping"].children[0].children[0].className = "progress-bar progress-bar-error";
 				TableRow.children["ping"].children[0].children[0].style.width = "100%";
 				TableRow.children["ping"].children[0].children[0].innerHTML = "<small>错误</small>";
